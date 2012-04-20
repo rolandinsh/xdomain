@@ -26,7 +26,7 @@ function listenToClicks()
 	var domains=["domain1.com", "domain2.com"];
 	var fileTypes=[".doc", ".xls", ".exe", ".zip", ".pdf", ".mov", ".mp3"];
 
-	jQuery('a').each(function(index) {
+	jQuery('a[href]').each(function(index) {
  		var link = jQuery(this);
 		var href = link.attr('href');
 		
@@ -43,8 +43,6 @@ function listenToClicks()
 
 		var valid = false;
 		jQuery.each(domains, function(j) {
-			try
-			{
 				if((jQuery(link).attr('href').indexOf(this)!=-1)&&(window.location.href.indexOf(this)==-1)){	
 					valid = true;
 
@@ -66,13 +64,7 @@ function listenToClicks()
 							}
 						});
 					}
-				}
-								
-			}
-			catch(e)
-			{
-				//Bad A tag
-			}			
+				}			
 		});
 
 		var rootDomain = document.domain.split(".")[document.domain.split(".").length - 2] + "." + document.domain.split(".")[document.domain.split(".").length - 1];
