@@ -3,7 +3,7 @@
 	Analytics, automatically tracks their downloads, and clicks on 
 	outbound links.
 	
-    Copyright (C) 2011  LunaMetrics
+    Copyright (C) 2012  LunaMetrics
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,46 +19,46 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-jQuery.noConflict();
+(function($) {
 
 function listenToClicks()
 {
 	var domains=["domain1.com", "domain2.com"];
 	var fileTypes=[".doc", ".xls", ".exe", ".zip", ".pdf", ".mov", ".mp3"];
 
-	jQuery('a[href]').each(function(index) {
- 		var link = jQuery(this);
+	$('a[href]').each(function(index) {
+ 		var link = $(this);
 		var href = link.attr('href');
 		
-		jQuery.each(fileTypes, function(i) {
-			if(jQuery(link).attr('href').indexOf(this)!=-1){
+		$.each(fileTypes, function(i) {
+			if($(link).attr('href').indexOf(this)!=-1){
 				valid = false;
-				jQuery(link).bind('click', function(c) {
+				$(link).bind('click', function(c) {
 					c.preventDefault();
-	                _gat._getTrackerByName()._trackEvent('Download', 'Click - ' + jQuery(link).attr('href'));
-	                setTimeout('document.location = "' + jQuery(link).attr('href') + '"', 100);
+	                _gat._getTrackerByName()._trackEvent('Download', 'Click - ' + $(link).attr('href'));
+	                setTimeout('document.location = "' + $(link).attr('href') + '"', 100);
 	            });
 			}
 		});
 
 		var valid = false;
-		jQuery.each(domains, function(j) {
-				if((jQuery(link).attr('href').indexOf(this)!=-1)&&(window.location.href.indexOf(this)==-1)){	
+		$.each(domains, function(j) {
+				if(($(link).attr('href').indexOf(this)!=-1)&&(window.location.href.indexOf(this)==-1)){	
 					valid = true;
 
 					if (valid)
 					{
-						jQuery(link).bind('click', function(l) {
+						$(link).bind('click', function(l) {
 							if(typeof(_gat)=="object"){
 								l.preventDefault();
-								if (jQuery(link).attr('target') != "_blank")
+								if ($(link).attr('target') != "_blank")
 								{
-									_gaq.push(['_link',jQuery(link).attr('href')]);
+									_gaq.push(['_link',$(link).attr('href')]);
 								}
 						 		else
 						 		{
 				 					var tracker = _gat._getTrackerByName();
-									var fullUrl = tracker._getLinkerUrl(jQuery(link).attr('href'));
+									var fullUrl = tracker._getLinkerUrl($(link).attr('href'));
 									window.open(fullUrl);
 						 		}
 							}
@@ -70,7 +70,7 @@ function listenToClicks()
 		var rootDomain = document.domain.split(".")[document.domain.split(".").length - 2] + "." + document.domain.split(".")[document.domain.split(".").length - 1];
 
 		if ( (href.match(/^http/)) && (href.indexOf(rootDomain) == -1) && !valid) {
-			jQuery(link).bind('click', function(d) {
+			$(link).bind('click', function(d) {
 					d.preventDefault();
 			      	_gat._getTrackerByName()._trackEvent('Outbound Link', href);
 			    	setTimeout('document.location = "' + href + '"', 100);
@@ -80,6 +80,8 @@ function listenToClicks()
 	
 }
 
-jQuery(document).ready(function() {
+$(document).ready(function() {
 	listenToClicks();
 });
+
+})(jQuery);
